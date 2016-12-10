@@ -2,7 +2,7 @@ function tau = estimate_lag(x1, x2, Fs, low_freq, high_freq, downsample_rate, ta
     % Parameters
     n  = length(x1); % The length of the signal
     Ts = 1/Fs;       % The time interval
-    search_width = 300; 
+    search_width = 100; 
     
     % Do FFT for each of the signals
     x1_fft = fft(x1',n); % same size as x1
