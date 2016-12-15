@@ -13,6 +13,15 @@ function tau = estimate_lag(x1, x2, Fs, low_freq, high_freq, downsample_rate, ta
     x1_filter  = x1_fft .* ideal_BP;
     x2_filter  = x2_fft .* ideal_BP;
     freq_range = (0:n-1)/n;
+    
+%     time_axis = linspace(0, length(x1_filter) / Fs, length(x1_filter));
+%     freq_axis = linspace(-Fs/2, Fs/2, length(x1_filter));
+%     f = figure;
+%     subplot(4,1,1); plot(time_axis, ifft(x1_filter), 'b'); xlabel('Time (s)'); title('x1 time domain');
+%     subplot(4,1,2); plot(time_axis, ifft(x2_filter), 'r'); xlabel('Time (s)'); title('x2 time domain');
+%     subplot(4,1,3); plot(freq_axis, fftshift(abs(x1_filter)), 'b'); xlabel('Freq (hz)'); title('x1 freq domain');
+%     subplot(4,1,4); plot(freq_axis, fftshift(abs(x2_filter)), 'r'); xlabel('Freq (hz)'); title('x2 freq domain');
+%     myboldify(f);
 
     % Remove the zero value.
     non_zero_ind = find(ideal_BP);
@@ -34,9 +43,9 @@ function tau = estimate_lag(x1, x2, Fs, low_freq, high_freq, downsample_rate, ta
     tau = tau_val(index) * Ts;
  
     % Plot the cost value
-%     f = figure;
-%     plot(tau_val * Ts, cost_val, 'b');
-%     xlabel('Lag (s)'); ylabel('Cost'); title('Lag-Cost Value');
-%     myboldify(f);
+    f = figure;
+    plot(tau_val * Ts, cost_val, 'b');
+    xlabel('Lag (s)'); ylabel('Cost'); title('Lag-Cost Value');
+    myboldify(f);
 
 end

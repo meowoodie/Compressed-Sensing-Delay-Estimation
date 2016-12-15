@@ -31,9 +31,9 @@ function conv_f = fftconv(x1, x2, Fs, low_freq, high_freq)
     cross = conj(x1_filter) .* x2_filter;
     conv_f = fftshift(ifft(cross));
 
-    f2 = figure; 
-    plot(real(conv_f)); 
-    title('fftconv'); 
-    ylabel('Amplitude');
-    myboldify(f2);
+%     f2 = figure; 
+%     plot(real(conv_f)); 
+%     title('fftconv'); 
+%     ylabel('Amplitude');
+%     myboldify(f2);
 end
