@@ -4,9 +4,10 @@ clear all;
 %% Preliminary
 
 % Prepare real data
-path     = '/Users/woodie/Desktop/Georgia-Tech-ISyE-Intern/time_delay_estimation/data/average_24hr_6v538-73392/';
-x1_data  = '73392_0000.txt';
-x2_data  = '73395_0000.txt';
+% path     = '/Users/woodie/Desktop/Georgia-Tech-ISyE-Intern/time_delay_estimation/data/average_24hr_6v538-73392/';
+path     = '/Users/woodie/Desktop/Compressed-Sensing-Delay-Estimation/txt_data/';
+x1_data  = '20140802160000.4001-0000.seis.txt';
+x2_data  = '20140802070000.4001-0000.seis.txt';
 [x1, x2] = signal_reader(path, x1_data, x2_data);
 
 % Prepare simulated data
