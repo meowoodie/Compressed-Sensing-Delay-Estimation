@@ -1,7 +1,7 @@
 import array
 from ctypes import *
 
-CSIZE  = 900000
+CSIZE  = 1800000
 FTSIZE = 1048576
 
 class SEIS_HEADER(Structure):
