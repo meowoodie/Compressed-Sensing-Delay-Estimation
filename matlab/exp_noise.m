@@ -1,19 +1,22 @@
 close all;
 clear all;
 
+addpath('/Users/woodie/Desktop/Compressed-Sensing-Delay-Estimation/matlab/lib');
+
 % Parameters
 Fs        = 500;        % Sampling rate
 Ts        = 1.0 / Fs;   % Time interval
-low_freq  = 0; %14.8;
+low_freq  = 0;   %14.8;
 high_freq = 200; %15.8;
 
 % Prepare simulated data
+res_name = 'test';
 n = 10000;
 time_ind = 1:n;
 period   = 5000;
 tau_ind  = 400;
 sigma    = 0.5;
-[x1, x2] = signal_generator(time_ind, tau_ind, period, Fs, sigma);
+[x1, x2] = signal_generator(time_ind, tau_ind, period, Fs, sigma, res_name);
 
 %% For non-noise data
 tau0_ind = tau_ind; % The initial tau for the method 2

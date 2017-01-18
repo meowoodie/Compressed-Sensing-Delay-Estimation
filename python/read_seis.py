@@ -63,6 +63,4 @@ if __name__ == '__main__':
     file_path = sys.argv[1]
     header, data = seis_reader(file_path)
     # print '\t'.join(map(str, header))
-    print '\n'.join(map(str, data))
-
-   
+    print '\n'.join(map(str, data)) 
