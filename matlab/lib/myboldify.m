@@ -8,7 +8,7 @@ function myboldify(h)
 % Modified by Jianhua Liu (SAL, UF), May. 31, 2002
 % This is good for slides
 
-if nargin < 1, h = gcf;, end
+if nargin < 1, h = gcf; end
 
 ha = get(h,'Children');
 

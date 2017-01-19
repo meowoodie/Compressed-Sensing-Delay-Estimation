@@ -1,4 +1,4 @@
-close all;
+==close all;
 clear all;
 
 addpath('/Users/woodie/Desktop/Compressed-Sensing-Delay-Estimation/matlab/lib');
