@@ -1,5 +1,5 @@
 #!/bin/bash
-input_path='../data'
+input_path='../raw_data'
 output_path='../txt_data'
 
 for folder_path in ${input_path}/*
