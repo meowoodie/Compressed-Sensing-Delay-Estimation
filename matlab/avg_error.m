@@ -40,7 +40,7 @@ ind_pair_list = combvec( ...
 sum_err = [];
 
 % Main Loop
-for i = 1:100 % size(ind_pair_list, 2)
+for i = 1:size(ind_pair_list, 2)
     
     % Ignore the pairs which have the same values 
     if ind_pair_list(1, i) ~= ind_pair_list(2, i)
@@ -73,7 +73,7 @@ for i = 1:100 % size(ind_pair_list, 2)
         %% Error (real tau - cs tau) over downsampling rate
         tau0_ind = tau_xcorr/Ts; % The initial tau for the method 2
         acc      = 100;          % The accuracy of the downsampling
-        times    = 1;            % The times of computation for one downsampling rate
+        times    = 3;            % The times of computation for one downsampling rate
         ds_rates = linspace(0, 1, acc); ds_rates(1) = []; % Remove value 0
         tau_list = zeros(1, acc - 1);
         for k = 1:acc-1
@@ -103,12 +103,14 @@ end
 
 % Compute the mean for each of the errors
 avg_err = mean(sum_err);
-x_axis  = (1:length(tau_list)) / (acc/100);   % downsampling rate 0-100%
 
-f = figure;
-% subplot(2,1,1); plot(x_axis, tau_list, 'r', x_axis, real_tau, 'b'); xlabel('downsampling rate(%)'); ylabel('Tau (s)');
-% subplot(2,1,2); 
-plot(x_axis, avg_err); xlabel('downsampling rate(%)'); ylabel('Error (s)');
-myboldify(f);
+% x_axis  = (1:length(tau_list)) / (acc/100);   % downsampling rate 0-100%
+% 
+% f = figure;
+% % subplot(2,1,1); plot(x_axis, tau_list, 'r', x_axis, real_tau, 'b'); xlabel('downsampling rate(%)'); ylabel('Tau (s)');
+% % subplot(2,1,2); 
+% plot(x_axis, avg_err); xlabel('downsampling rate(%)'); ylabel('Error (s)');
+% myboldify(f);
 
+save('error_over_downsampling.mat', 'sum_err', 'avg_err');
 
