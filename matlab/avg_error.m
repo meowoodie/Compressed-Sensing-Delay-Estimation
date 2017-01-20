@@ -40,10 +40,11 @@ ind_pair_list = combvec( ...
 sum_err = [];
 
 % Main Loop
-for i = 1:20 % size(ind_pair_list, 2)
+for i = 1:100 % size(ind_pair_list, 2)
     
     % Ignore the pairs which have the same values 
     if ind_pair_list(1, i) ~= ind_pair_list(2, i)
+        %% Prepare the data
         dir_a = dir_name_list{ind_pair_list(1, i)};
         dir_b = dir_name_list{ind_pair_list(2, i)};
         fprintf('Processing %s & %s ...\n', dir_a, dir_b);
@@ -75,36 +76,34 @@ for i = 1:20 % size(ind_pair_list, 2)
         times    = 1;            % The times of computation for one downsampling rate
         ds_rates = linspace(0, 1, acc); ds_rates(1) = []; % Remove value 0
         tau_list = zeros(1, acc - 1);
-        for i = 1:acc-1
+        for k = 1:acc-1
             taus = zeros(1, times);
             for j = 1:times
-                taus(j) = estimate_lag(x1, x2, Fs, low_freq, high_freq, ds_rates(i), tau0_ind);
+                taus(j) = estimate_lag(x1, x2, Fs, low_freq, high_freq, ds_rates(k), tau0_ind);
             end
-            tau_list(i) = mean(taus);
-            fprintf('Downsampling rate:%f\n', ds_rates(i));
-            fprintf('Tau:\t%0.8f\n', tau_list(i));
+            tau_list(k) = mean(taus);
+%             fprintf('Downsampling rate:%f\n', ds_rates(k));
+%             fprintf('Tau:\t%0.8f\n', tau_list(k));
         end
         
-        % x_axis   = (1:length(tau_list)) / (acc/100);   % downsampling rate 0-100%
         real_tau = tau_cs * ones(1, length(tau_list)); % xcorr tau over downsampling rate
         error    = abs(real_tau - tau_list);           % error over downsampling rate
         
-        sum_err = [sum_err; error];
+%         x_axis   = (1:length(tau_list)) / (acc/100);   % downsampling rate 0-100%
+%         f = figure;
+% %         subplot(2,1,1); plot(x_axis, tau_list, 'r', x_axis, real_tau, 'b'); xlabel('downsampling rate(%)'); ylabel('Tau (s)');
+% %         subplot(2,1,2); 
+%         plot(x_axis, error); xlabel('downsampling rate(%)'); ylabel('Error (s)');
+%         myboldify(f);
         
-        x_axis   = (1:length(tau_list)) / (acc/100);   % downsampling rate 0-100%
-        f = figure;
-%         subplot(2,1,1); plot(x_axis, tau_list, 'r', x_axis, real_tau, 'b'); xlabel('downsampling rate(%)'); ylabel('Tau (s)');
-%         subplot(2,1,2); 
-        plot(x_axis, error); xlabel('downsampling rate(%)'); ylabel('Error (s)');
-        myboldify(f);
+        sum_err = [sum_err; error];
         
     end
 end
 
 % Compute the mean for each of the errors
 avg_err = mean(sum_err);
-
-x_axis   = (1:length(tau_list)) / (acc/100);   % downsampling rate 0-100%
+x_axis  = (1:length(tau_list)) / (acc/100);   % downsampling rate 0-100%
 
 f = figure;
 % subplot(2,1,1); plot(x_axis, tau_list, 'r', x_axis, real_tau, 'b'); xlabel('downsampling rate(%)'); ylabel('Tau (s)');
