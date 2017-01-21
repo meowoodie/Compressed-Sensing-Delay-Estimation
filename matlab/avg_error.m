@@ -45,7 +45,7 @@ ind_pair_list = combine_pair(1:length(dir_name_list));
 sum_err = [];
 
 % Main Loop
-for i = 1:size(ind_pair_list, 2)
+for i = 1:300 %size(ind_pair_list, 2)
     %% Prepare the data
     dir_a = dir_name_list{ind_pair_list(1, i)};
     dir_b = dir_name_list{ind_pair_list(2, i)};
