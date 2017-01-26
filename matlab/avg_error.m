@@ -42,7 +42,8 @@ ind_pair_list = combine_pair(1:length(dir_name_list));
  
 % The final result: 
 % average error for multiple pairs of stations.
-sum_err = [];
+sum_err    = [];
+lag_result = [];
 
 % Main Loop
 for i = 1:300 %size(ind_pair_list, 2)
@@ -72,6 +73,14 @@ for i = 1:300 %size(ind_pair_list, 2)
     fprintf('Compressed Sensing Tau index: %d\n', tau_cs/Ts);
     fprintf('Compressed Sensing Tau: %s\n', tau_cs);
 
+    result = struct(...
+        'station_A', dir_a, ...
+        'station_B', dir_b, ...
+        'xcorr', tau_xcorr, ...
+        'compressed_sensing', tau_cs);
+    
+    lag_result = [lag_result; result];
+    
     %% Error (real tau - cs tau) over downsampling rate
     tau0_ind = tau_xcorr/Ts; % The initial tau for the method 2
     acc      = 100;          % The accuracy of the downsampling
@@ -98,19 +107,19 @@ for i = 1:300 %size(ind_pair_list, 2)
 %         plot(x_axis, error); xlabel('downsampling rate(%)'); ylabel('Error (s)');
 %         myboldify(f);
 
-    sum_err = [sum_err; error];        
+    sum_err = [sum_err; error];       
 end
 
-% Compute the mean for each of the errors
-avg_err = mean(sum_err);
-
-x_axis  = (1:length(tau_list)) / (acc/100);   % downsampling rate 0-100%
-
-f = figure;
-% subplot(2,1,1); plot(x_axis, tau_list, 'r', x_axis, real_tau, 'b'); xlabel('downsampling rate(%)'); ylabel('Tau (s)');
-% subplot(2,1,2); 
-plot(x_axis, avg_err); xlabel('downsampling rate(%)'); ylabel('Error (s)');
-myboldify(f);
-
-save('error_over_downsampling.mat', 'sum_err', 'avg_err');
+% % Compute the mean for each of the errors
+% avg_err = mean(sum_err);
+% 
+% x_axis  = (1:length(tau_list)) / (acc/100);   % downsampling rate 0-100%
+% 
+% f = figure;
+% % subplot(2,1,1); plot(x_axis, tau_list, 'r', x_axis, real_tau, 'b'); xlabel('downsampling rate(%)'); ylabel('Tau (s)');
+% % subplot(2,1,2); 
+% plot(x_axis, avg_err); xlabel('downsampling rate(%)'); ylabel('Error (s)');
+% myboldify(f);
+% 
+% save('error_over_downsampling.mat', 'sum_err', 'avg_err');
 
