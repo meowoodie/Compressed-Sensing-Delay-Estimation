@@ -1,3 +1,18 @@
+# ***********************************************************************
+# Stack Data into 5 minutes window
+# 
+# This code was a preprocessing for utah seismic dataset from the link:
+# http://home.chpc.utah.edu/~u0992976/Socal/
+# It focus on stacking all the data in the station folders into a 
+# 5 minutes window, which mainly includes 2 steps:
+# - Stack data of all days (in a station folder) into only one day
+# - Stack data of one day into 5 mins window
+#     * Cut one day data into pieces with 5 mins length
+#     * Stack those slices of data with 5min length into one
+# The results will be put into a new generated folder which you can 
+# designate specifically in the start of the code.
+# ***********************************************************************
+
 import os
 import sys
 import arrow
@@ -69,4 +84,3 @@ for station in os.listdir(root_path):
 	# - Stack those slices of data with 5min length into one
 	# -----------------------------------------------------------------
 	
-
