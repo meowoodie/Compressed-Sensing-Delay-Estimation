@@ -11,8 +11,8 @@ function [x1, x2] = signal_reader(path_1, path_2, x1_data, x2_data, res_name)
     x2 = normc(x2);
     fclose(f2);
     
-    time_axis = linspace(0, 3600, length(x1));
-    freq_axis = linspace(-250, 250, length(x1));
+%     time_axis = linspace(0, 3600, length(x1));
+%     freq_axis = linspace(-250, 250, length(x1));
     
 %     f = figure('visible', 'off');
 %     subplot(4,1,1); plot(time_axis, x1, 'b'); xlabel('Time (s)'); title('x1 time domain');
