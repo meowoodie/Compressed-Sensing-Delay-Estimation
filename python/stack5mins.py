@@ -30,6 +30,7 @@ date_ranges = [
 	'09212016',
 	'09222016'
 ]
+window_size = 100000
 
 # Traverse station folders
 for station in os.listdir(root_path):
@@ -63,10 +64,8 @@ for station in os.listdir(root_path):
 				one_day_sum = np.zeros(len(rawdata))
 
 			print >> sys.stderr, '[%s] %s' % (arrow.now(), data)
-			one_day_data = []
-			for line in rawdata:
-				one_day_data.append(float(line.strip().split()[1]))
-			one_day_sum = np.array(one_day_data) + one_day_sum
+			one_day_data = np.array([ float(line.strip().split()[1]) for line in rawdata ])
+			one_day_sum  = one_day_data + one_day_sum
 
 	# -----------------------------------------------------------------
 	# First step:
@@ -83,4 +82,11 @@ for station in os.listdir(root_path):
 	# - Cut one day data into pieces with 5 mins length
 	# - Stack those slices of data with 5min length into one
 	# -----------------------------------------------------------------
-	
+	stack_len    = len(one_day_sum)/window_size
+	_5_mins_data = one_day_sum[0:stack_len*window_size] \
+		.reshape(stack_len, window_size) \
+		.sum(axis=0)
+	with open('%s/stacked_5_mins.txt' % stacked_path, 'w') as f:
+		for value in _5_mins_data.tolist():
+			f.write('%f\n' % value)
+
