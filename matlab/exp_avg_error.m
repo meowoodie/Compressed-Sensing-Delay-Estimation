@@ -112,6 +112,8 @@ for i = 1:30 %size(ind_pair_list, 2)
     sum_err = [sum_err; error];       
 end
 
+save('error_over_downsampling.mat', 'sum_err', 'avg_err');
+
 % Compute the mean for each of the errors
 avg_err = mean(sum_err);
 
@@ -122,6 +124,4 @@ f = figure;
 % subplot(2,1,2); 
 plot(x_axis, avg_err); xlabel('downsampling rate(%)'); ylabel('Error (s)');
 myboldify(f);
-
-save('error_over_downsampling.mat', 'sum_err', 'avg_err');
 
