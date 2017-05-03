@@ -12,9 +12,9 @@ low_freq  = 1;
 high_freq = 3;
 
 % Preparation for utah data
-root_path      = '/Users/woodie/Desktop/utah/';
-center_station = '010';
-other_stations = {'020' '030' '040' '025' '052' '408'};
+root_path      = '/Users/woodie/Desktop/stacked_utah_dataset/';
+center_station = '001';
+other_stations = {'020'}; %'030' '040' '025' '052' '408'};
 
 %% EXP: Test good/bad stations of Utah Dataset
 

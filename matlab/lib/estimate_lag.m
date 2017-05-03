@@ -1,4 +1,5 @@
-function tau = estimate_lag(x1, x2, Fs, low_freq, high_freq, downsample_rate, tau_ind)
+function tau = estimate_lag( ...
+    x1, x2, Fs, low_freq, high_freq, downsample_rate, tau_ind)
     % Parameters
     n  = length(x1); % The length of the signal
     Ts = 1/Fs;       % The time interval
@@ -42,10 +43,10 @@ function tau = estimate_lag(x1, x2, Fs, low_freq, high_freq, downsample_rate, ta
     [min_cost, index] = min(cost_val);
     tau = tau_val(index) * Ts;
  
-%     % Plot the cost value
-%     f = figure;
-%     plot(tau_val * Ts, cost_val, 'b');
-%     xlabel('Lag (s)'); ylabel('Cost'); title('Lag-Cost Value');
-%     myboldify(f);
+    % Plot the cost value
+    f = figure;
+    plot(tau_val * Ts, cost_val, 'b');
+    xlabel('Lag (s)'); ylabel('Cost'); title('Lag-Cost Value');
+    myboldify(f);
 
 end
