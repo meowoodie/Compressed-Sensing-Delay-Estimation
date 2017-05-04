@@ -10,7 +10,8 @@ function tau = estimate_lag( ...
     x2_fft = fft(x2',n); % same size as x2
     
     % Apply bandpass filter
-    ideal_BP   = filters.ideal_BP_DS_filter(low_freq, high_freq, downsample_rate, n, Fs);
+    ideal_BP   = filters.ideal_BP_DS_filter( ...
+        low_freq, high_freq, downsample_rate, n, Fs);
     x1_filter  = x1_fft .* ideal_BP;
     x2_filter  = x2_fft .* ideal_BP;
     freq_range = (0:n-1)/n;
@@ -44,9 +45,9 @@ function tau = estimate_lag( ...
     tau = tau_val(index) * Ts;
  
     % Plot the cost value
-    f = figure;
-    plot(tau_val * Ts, cost_val, 'b');
-    xlabel('Lag (s)'); ylabel('Cost'); title('Lag-Cost Value');
-    myboldify(f);
+%     f = figure;
+%     plot(tau_val * Ts, cost_val, 'b');
+%     xlabel('Lag (s)'); ylabel('Cost'); title('Lag-Cost Value');
+%     myboldify(f);
 
 end
