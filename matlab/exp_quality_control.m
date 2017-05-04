@@ -20,12 +20,12 @@ other_stations = {'020' '030' '040' '025' '052' '408'};
 
 %% EXP: Test good/bad stations of Utah Dataset
 
-center_x = read_one_signal([root_path center_station '/one_week.stacked_5_mins.txt']);
+center_x = read_one_signal([root_path center_station '/all.stacked_5_mins.txt']);
 n        = length(center_x);
 
 for i=1:length(other_stations)
     fprintf('EXP: %s vs %s\n', center_station, other_stations{i});
-    other_x = read_one_signal([root_path other_stations{i} '/one_week.stacked_5_mins.txt']);
+    other_x = read_one_signal([root_path other_stations{i} '/all.stacked_5_mins.txt']);
     
     % Method 1: FFT-convolution
     conv_f = fftconv(center_x, other_x, Fs, low_freq, high_freq);
