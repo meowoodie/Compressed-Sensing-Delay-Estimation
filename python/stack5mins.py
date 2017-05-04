@@ -22,15 +22,15 @@ import subprocess
 root_path   = '../../utah'
 output_path = '../../stacked_utah_dataset'
 date_ranges = [
-	'09162016',
-	'09172016',
-	'09182016',
-	'09192016',
-	'09202016',
-	'09212016',
-	'09222016'
+	# '09162016',
+	# '09172016',
+	# '09182016',
+	# '09192016',
+	# '09202016',
+	# '09212016',
+	# '09222016'
 ]
-window_size = 100000
+window_size = 5 * 60 * 50
 
 # Traverse station folders
 for station in os.listdir(root_path):
@@ -38,11 +38,14 @@ for station in os.listdir(root_path):
 		continue
 	# Output path
 	stacked_path = '%s/%s' % (output_path, station)
+	print >> sys.stderr, '[%s] Create output path: %s' % (arrow.now(), stacked_path)
 	if not os.path.exists(stacked_path):
 		os.makedirs(stacked_path)
 
 	one_day_sum = []
-	days_num    = float(len(os.listdir('%s/%s' % (root_path, station))))
+	days_num    = len(date_ranges) 
+	if days_num == 0:
+		days_num = float(len(os.listdir('%s/%s' % (root_path, station))))
 	valid_data  = [ '%s.EHZ.%s.txt' % (station, date) for date in date_ranges ]
 	# Traverse data files
 	for data in os.listdir('%s/%s' % (root_path, station)):
@@ -72,9 +75,9 @@ for station in os.listdir(root_path):
 	# Stack data of all days into only one day
 	# -----------------------------------------------------------------
 	one_day_avg = one_day_sum/days_num
-	with open('%s/stacked_one_day.txt' % stacked_path, 'w') as f:
-		for value in one_day_avg.tolist():
-			f.write('%f\n' % value)
+	# with open('%s/one_week.stacked_one_day.txt' % stacked_path, 'w') as f:
+	# 	for value in one_day_avg.tolist():
+	# 		f.write('%f\n' % value)
 
 	# -----------------------------------------------------------------
 	# Second step:
@@ -83,10 +86,10 @@ for station in os.listdir(root_path):
 	# - Stack those slices of data with 5min length into one
 	# -----------------------------------------------------------------
 	stack_len    = len(one_day_sum)/window_size
-	_5_mins_data = one_day_sum[0:stack_len*window_size] \
+	_5_mins_data = one_day_avg[0:stack_len*window_size] \
 		.reshape(stack_len, window_size) \
 		.sum(axis=0)
-	with open('%s/stacked_5_mins.txt' % stacked_path, 'w') as f:
+	with open('%s/all.stacked_5_mins.txt' % stacked_path, 'w') as f:
 		for value in _5_mins_data.tolist():
 			f.write('%f\n' % value)
 
