@@ -22,13 +22,13 @@ import subprocess
 root_path   = '../../utah'
 output_path = '../../stacked_utah_dataset'
 date_ranges = [
-	# '09162016',
-	# '09172016',
-	# '09182016',
-	# '09192016',
-	# '09202016',
-	# '09212016',
-	# '09222016'
+	'09162016',
+	'09172016',
+	'09182016',
+	'09192016',
+	'09202016',
+	'09212016',
+	'09222016'
 ]
 window_size = 5 * 60 * 50
 
@@ -87,9 +87,17 @@ for station in os.listdir(root_path):
 	# -----------------------------------------------------------------
 	stack_len    = len(one_day_sum)/window_size
 	_5_mins_data = one_day_avg[0:stack_len*window_size] \
-		.reshape(stack_len, window_size) \
-		.sum(axis=0)
-	with open('%s/all.stacked_5_mins.txt' % stacked_path, 'w') as f:
-		for value in _5_mins_data.tolist():
-			f.write('%f\n' % value)
+		.reshape(stack_len, window_size)
+		# .sum(axis=0)
+
+	# with open('%s/all.stacked_5_mins.txt' % stacked_path, 'w') as f:
+	# 	for value in _5_mins_data.tolist():
+	# 		f.write('%f\n' % value)
+
+	index = 0
+	for _5_min_patch in _5_mins_data.tolist():
+		with open('%s/%s.week.stacked_5_mins.txt' % (stacked_path, index), 'w') as f:
+			for value in _5_min_patch:
+				f.write('%f\n' % value)
+		index += 1
 
