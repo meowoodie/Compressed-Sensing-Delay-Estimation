@@ -44,7 +44,7 @@ function tau = estimate_lag( ...
     [min_cost, index] = min(cost_val);
     tau = tau_val(index) * Ts;
  
-    % Plot the cost value
+%     % Plot the cost value
 %     f = figure;
 %     plot(tau_val * Ts, cost_val, 'b');
 %     xlabel('Lag (s)'); ylabel('Cost'); title('Lag-Cost Value');
