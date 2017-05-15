@@ -13,6 +13,7 @@ high_freq = 3;
 acc       = 100;        % The accuracy of the downsampling
 times     = 200;        % The times of computation for one downsampling rate
 num_win   = 288;        % The number of the windows
+repeat    = 100;
 
 % Preparation for utah data
 root_path      = '/Users/woodie/Desktop/stacked_utah_dataset/';
@@ -35,15 +36,19 @@ for i=1:length(other_stations)
         conv_f = fftconv(center_x, other_x, Fs, low_freq, high_freq);
         [m_value, m_index] = max(real(conv_f));
         win_xcorr(j+1) = (m_index - n) * Ts;
-        fprintf('FFT-Convolution Tau: %s\n', win_xcorr(j+1));
+        % fprintf('FFT-Convolution Tau: %s\n', win_xcorr(j+1));
 
         % Method 2: Compressed Sensing
-        tau0_ind      = win_xcorr(j+1)/Ts; % The initial tau for the method 2
-        win_taus(j+1) = estimate_lag(center_x, other_x, Fs, low_freq, high_freq, 1, tau0_ind);
-        fprintf('Compressed Sensing Tau: %s\n', win_taus(j+1)); 
-        break
+        repeat_taus = zeros(1, repeat);
+        tau0_ind = win_xcorr(j+1)/Ts; % The initial tau for the method 2
+        for x=1:repeat
+            repeat_taus(x) = estimate_lag(center_x, other_x, Fs, low_freq, high_freq, 1, tau0_ind);
+        end
+        win_taus(j+1) = mean(repeat_taus);
+        % fprintf('Compressed Sensing Tau: %s\n', win_taus(j+1)); 
     end
-    
+    fprintf('FFT-Convolution Tau: %s\n', mean(win_xcorr));
+    fprintf('Compressed Sensing Tau: %s\n', mean(win_taus)); 
 %     % Error vs Downsampling rate
 %     ds_rates = linspace(0, 1, acc);  ds_rates(1) = []; % Remove value 0
 %     tau_list = zeros(1, acc - 1);
