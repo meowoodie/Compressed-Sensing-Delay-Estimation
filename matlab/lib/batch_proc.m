@@ -25,7 +25,7 @@ function [ result ] = batch_proc( ...
 
     %% Do func_handle in batches with the divided segments of the signal
     
-    result = zeros(1,b);
+    result = [];
     for i=1:b
         signal_a = x1(i,:);
         signal_b = x2(i,:);
@@ -42,7 +42,7 @@ function [ result ] = batch_proc( ...
         %       an anonymous function where the parameters are set,
         %       e.g. func_handle = @(signal_a, signal_b) ...
         %            your_function(signal_a, signal_b, your_paras)
-        result(i) = func_handle(signal_a, signal_b);
+        result = [result; func_handle(signal_a, signal_b)];
     end
 
 end
