@@ -1,15 +1,12 @@
-function [x1, x2] = signal_reader(path_1, path_2, x1_data, x2_data, res_name)
+function x = signal_reader(path)
+% Read signal from specific local file path
+% And normalize the raw signal.
     formatSpec = '%f';
-    
-    f1 = fopen([path_1 x1_data],'r');
-    x1 = fscanf(f1,formatSpec);
-    x1 = normc(x1);
-    fclose(f1);
-
-    f2 = fopen([path_2 x2_data],'r');
-    x2 = fscanf(f2,formatSpec);
-    x2 = normc(x2);
-    fclose(f2);
+    f = fopen(path, 'r');
+    x = fscanf(f, formatSpec);
+    x = normc(x);
+    fclose(f);
+end
     
 %     time_axis = linspace(0, 3600, length(x1));
 %     freq_axis = linspace(-250, 250, length(x1));
@@ -26,5 +23,3 @@ function [x1, x2] = signal_reader(path_1, path_2, x1_data, x2_data, res_name)
 %         res_name ... 
 %         '.jpg'];
 %     saveas(f,res_path,'jpg');
-end
-
