@@ -1,8 +1,11 @@
-function [ result ] = batch_handler( ...
+function [ result ] = batch_proc( ...
     x1, x2, window_size, ...
     func_handle) 
-% Batch Handler
-% 
+% Batch Proc takes two signals, window size and a function handler as its
+% parameters, which used to preprocess the raw signals and do the indicated
+% task for the segments of the signals.
+% The preprocessing of the raw signals includes 1. cutting the signals by 
+% the size of the windows into multiple segments; 2. Whitening; 3. Taper.
 
     %% Cut the signals into multiple segments by the window size
 
@@ -21,6 +24,7 @@ function [ result ] = batch_handler( ...
     x2 = transpose(x2);
 
     %% Do func_handle in batches with the divided segments of the signal
+    
     result = zeros(1,b);
     for i=1:b
         signal_a = x1(i,:);
@@ -31,7 +35,8 @@ function [ result ] = batch_handler( ...
         gaussian_window = normpdf((1:window_size), mean, sigma);
         signal_a = signal_a .* gaussian_window;
         signal_b = signal_b .* gaussian_window;
-        % Do callback function
+        % Do callback function, like cross-correlation or our
+        % compressed-sensing based algorithm ...
         % Note: If you have other paremeters for the func_handle,
         %       you simply need to wrap your funtion handle into 
         %       an anonymous function where the parameters are set,
