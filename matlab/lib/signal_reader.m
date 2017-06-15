@@ -4,13 +4,17 @@ function x = signal_reader(path)
     formatSpec = '%f';
     f = fopen(path, 'r');
     x = fscanf(f, formatSpec);
+    x = reshape(x, 2, length(x)/2);
     x = normc(x);
     fclose(f);
+    
+    figure;
+    time_axis = linspace(0, floor(length(x)/50), length(x));
+    freq_axis = linspace(-25, 25, length(x));
+    subplot(2,1,1); plot(time_axis, x, 'b'); xlabel('Time (s)'); title('time domain');
+    subplot(2,1,2); plot(freq_axis, fftshift(abs(fft(x))), 'b'); xlabel('Freq (hz)'); title('freq domain');
 end
-    
-%     time_axis = linspace(0, 3600, length(x1));
-%     freq_axis = linspace(-250, 250, length(x1));
-    
+
 %     f = figure('visible', 'off');
 %     subplot(4,1,1); plot(time_axis, x1, 'b'); xlabel('Time (s)'); title('x1 time domain');
 %     subplot(4,1,2); plot(time_axis, x2, 'r'); xlabel('Time (s)'); title('x2 time domain');

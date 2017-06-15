@@ -24,14 +24,8 @@ window_size = 5 * 60 * Fs;
 xcorr_list = batch_proc(x1, x2, window_size, @(sig_a, sig_b) ...
     [...
         fftconv(sig_a, sig_b, Fs, low_freq, high_freq) ...
-        estimate_lag(sig_a, sig_b, Fs, low_freq, high_freq, 1, tau0_ind)
+        estimate_lag(sig_a, sig_b, Fs, low_freq, high_freq, 1, tau0_ind) ...
     ]);
-
-%% Method 2: Compressed Sensing
-tau0_ind = tau_xcorr/Ts; % The initial tau for the method 2
-tau_cs   = estimate_lag(x1, x2, Fs, low_freq, high_freq, 0.4, tau0_ind);
-fprintf('Compressed Sensing Tau index: %d\n', tau_cs/Ts);
-fprintf('Compressed Sensing Tau: %s\n', tau_cs);
 
 %% EXP1: Error (real tau - cs tau) over downsampling rate
 % tau0_ind = tau_xcorr/Ts; % The initial tau for the method 2
