@@ -6,8 +6,8 @@ addpath('lib');
 %% Preliminary
 
 % Prepare real data
-path_1 = '/Users/woodie/Desktop/utah/001/001.EHZ.10222016.txt';
-path_2 = '/Users/woodie/Desktop/utah/020/020.EHZ.10222016.txt';
+path_1 = '/Users/woodie/Desktop/utah/001/001.EHZ.10212016.txt';
+path_2 = '/Users/woodie/Desktop/utah/020/020.EHZ.10212016.txt';
 x1 = signal_reader(path_1);
 x2 = signal_reader(path_2);
 n  = length(x1); % The length of the signal
@@ -20,8 +20,8 @@ high_freq = 3;
 window_size = 5 * 60 * Fs;
 
 % Plot raw signals
-% paint.signal(x1, Fs);
-% paint.signal(x2, Fs);
+paint.signal(x1, Fs);
+paint.signal(x2, Fs);
 
 % Gaussian Filter
 filter = filters.gaussian_filter( ...
@@ -46,6 +46,7 @@ Y = mean(Y_list);
 non_zero_ind = find(filter);
 [tau, tau_val, cost_val] = compressed_sensing.solution( ...
     Y, Fs, tau_xcorr / Ts, n, non_zero_ind, 100000);
+fprintf('Compressed Sensing Tau: %s\n', tau);
 
 %% EXP1: Error (real tau - cs tau) over downsampling rate
 % tau0_ind = tau_xcorr/Ts; % The initial tau for the method 2
