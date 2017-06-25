@@ -1,4 +1,4 @@
-function tau = fftconv(x1, x2, Fs, low_freq, high_freq)
+function conv_f = fftconv(x1, x2, Fs, low_freq, high_freq)
     %% Padding zeros
     x1 = [x1 zeros(1, length(x1))];
     x2 = [x2 zeros(1, length(x2))];
@@ -13,10 +13,10 @@ function tau = fftconv(x1, x2, Fs, low_freq, high_freq)
 %     subplot(2,1,2); plot(abs(x2_fft));
 
     %% apply bandpass filter
-    ideal_BP = filters.gaussian_filter(low_freq, high_freq, 1, n, Fs);
+    filter = filters.gaussian_filter(low_freq, high_freq, 1, n, Fs);
 
-    x1_filter = x1_fft .* ideal_BP;
-    x2_filter = x2_fft .* ideal_BP;
+    x1_filter = x1_fft .* filter;
+    x2_filter = x2_fft .* filter;
 
 %     f1 = figure;
 %     subplot(2,1,1); plot(fftshift(abs(x1_filter))); title('filtered x1 freq domain');
@@ -34,7 +34,7 @@ function tau = fftconv(x1, x2, Fs, low_freq, high_freq)
 %     myboldify(f2);
 
     %% Calculate the delay
-    [m_value, m_index] = max(real(conv_f));
-    tau = (m_index - n) / Fs;
-    disp(tau);
+%     [m_value, m_index] = max(real(conv_f));
+%     tau = (m_index - n/2) / Fs;
+%     disp(tau);
 end

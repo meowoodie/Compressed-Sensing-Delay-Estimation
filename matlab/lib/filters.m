@@ -6,8 +6,8 @@ classdef filters
                 n, Fs)
             % Index of low frequency and high frequency in the positive
             % frequency domain
-            ind_low  = round(low_freq * n / Fs);
-            ind_high = round(high_freq * n / Fs);
+            ind_low  = round(low_freq * n / Fs) + 1;
+            ind_high = round(high_freq * n / Fs) + 1;
             filter = zeros(1, n);
             % Positive freq part
             filter(ind_low:ind_high - 1) = ones(1, ind_high - ind_low); 
@@ -28,8 +28,8 @@ classdef filters
                 n, Fs)
             % Index of low frequency and high frequency in the positive
             % frequency domain
-            ind_low  = round(low_freq * n / Fs);
-            ind_high = round(high_freq * n / Fs);
+            ind_low  = round(low_freq * n / Fs) + 1;
+            ind_high = round(high_freq * n / Fs) + 1;
             filter = zeros(1, n);
             % Gaussian window
             sigma = (ind_high - ind_low)/6;
