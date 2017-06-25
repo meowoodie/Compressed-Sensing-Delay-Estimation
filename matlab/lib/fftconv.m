@@ -1,4 +1,4 @@
-function conv_f = fftconv(x1, x2, Fs, low_freq, high_freq)
+function R = fftconv(x1, x2, Fs, low_freq, high_freq)
     %% Padding zeros
     x1 = [x1 zeros(1, length(x1))];
     x2 = [x2 zeros(1, length(x2))];
@@ -7,10 +7,6 @@ function conv_f = fftconv(x1, x2, Fs, low_freq, high_freq)
     %% Do FFT for each of the signals
     x1_fft = fft(x1, n); % same size as x1
     x2_fft = fft(x2, n); % same size as x2
-    
-%     fig_1 = figure;
-%     subplot(2,1,1); plot(abs(x1_fft));
-%     subplot(2,1,2); plot(abs(x2_fft));
 
     %% apply bandpass filter
     filter = filters.gaussian_filter(low_freq, high_freq, 1, n, Fs);
@@ -18,23 +14,8 @@ function conv_f = fftconv(x1, x2, Fs, low_freq, high_freq)
     x1_filter = x1_fft .* filter;
     x2_filter = x2_fft .* filter;
 
-%     f1 = figure;
-%     subplot(2,1,1); plot(fftshift(abs(x1_filter))); title('filtered x1 freq domain');
-%     subplot(2,1,2); plot(fftshift(abs(x2_filter))); title('filtered x2 freq domain');
-%     myboldify(f1);
-
     %% Cross-correlation by FFT -> convolution -> IFFT
     cross = conj(x1_filter) .* x2_filter;
-    conv_f = fftshift(ifft(cross));
- 
-%     f2 = figure; 
-%     plot(real(conv_f)); 
-%     title('fftconv'); 
-%     ylabel('Amplitude');
-%     myboldify(f2);
+    R = fftshift(ifft(cross));
 
-    %% Calculate the delay
-%     [m_value, m_index] = max(real(conv_f));
-%     tau = (m_index - n/2) / Fs;
-%     disp(tau);
 end

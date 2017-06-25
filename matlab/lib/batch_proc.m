@@ -26,7 +26,7 @@ function [ result ] = batch_proc( ...
     % A row of the matrix is a segment of the raw signal (x(i,:))
     x1 = transpose(x1);
     x2 = transpose(x2);
-    fprintf('Window size: %d. Number of segments: %d', window_size, b);
+    fprintf('Window size: %d. Number of segments: %d\n', window_size, b);
 
     %% Do func_handle in batches with the divided segments of the signal
     
@@ -45,10 +45,10 @@ function [ result ] = batch_proc( ...
         signal_b = signal_b .* gaussian_window;
         % For debugging
         % Plot the central segment
-        if i == b/2
-            paint.signal(gaussian_window, 50);
-            paint.signal(signal_b, 50);
-        end
+%         if i == b/2
+%             paint.signal(gaussian_window, 50);
+%             paint.signal(signal_b, 50);
+%         end
         % Do callback function, like cross-correlation or our
         % compressed-sensing based algorithm ...
         % Note: If you have other paremeters for the func_handle,

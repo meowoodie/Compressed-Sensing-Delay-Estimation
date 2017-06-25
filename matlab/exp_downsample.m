@@ -19,13 +19,33 @@ low_freq  = 1;
 high_freq = 3;
 window_size = 5 * 60 * Fs;
 
+% Plot raw signals
+% paint.signal(x1, Fs);
+% paint.signal(x2, Fs);
+
+% Gaussian Filter
+filter = filters.gaussian_filter( ...
+    low_freq, high_freq, 1, window_size, Fs);
+        
 %% Method 1: FFT-convolution
 
-xcorr_list = batch_proc(x1, x2, window_size, @(sig_a, sig_b) ...
-    [...
-        fftconv(sig_a, sig_b, Fs, low_freq, high_freq) ...
-        estimate_lag(sig_a, sig_b, Fs, low_freq, high_freq, 1, tau0_ind) ...
-    ]);
+R_list = batch_proc(x1, x2, window_size, @(sig_a, sig_b) ...
+	abs(real(fftconv(sig_a, sig_b, Fs, low_freq, high_freq))).^2);
+
+R = mean(R_list);
+[m_value, m_index] = max(real(R));
+tau_xcorr = (m_index - n) * Ts;
+fprintf('FFT-Convolution Tau: %s\n', tau_xcorr);
+
+%% Method 2: Compressed-Sensing
+
+Y_list = batch_proc(x1, x2, window_size, @(sig_a, sig_b) ...
+	compressed_sensing.sub_cost_function(sig_a, sig_b, filter));
+
+Y = mean(Y_list);
+non_zero_ind = find(filter);
+[tau, tau_val, cost_val] = compressed_sensing.solution( ...
+    Y, Fs, tau_xcorr / Ts, n, non_zero_ind, 100000);
 
 %% EXP1: Error (real tau - cs tau) over downsampling rate
 % tau0_ind = tau_xcorr/Ts; % The initial tau for the method 2
