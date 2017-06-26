@@ -6,10 +6,21 @@ addpath('lib');
 %% Preliminary
 
 % Prepare real data
-path_1 = '/Users/woodie/Desktop/utah/001/001.EHZ.10212016.txt';
-path_2 = '/Users/woodie/Desktop/utah/020/020.EHZ.10212016.txt';
-x1 = signal_reader(path_1);
-x2 = signal_reader(path_2);
+% path_1 = '/Users/woodie/Desktop/utah/001/001.EHZ.10212016.txt';
+% path_2 = '/Users/woodie/Desktop/utah/020/020.EHZ.10212016.txt';
+% x1 = signal_reader(path_1);
+% x2 = signal_reader(path_2);
+% n  = length(x1); % The length of the signal
+path_1 = '/Users/woodie/Desktop/utah/001';
+path_2 = '/Users/woodie/Desktop/utah/020';
+x1 = stack(path_1, {...
+    '001.EHZ.09162016.txt', '001.EHZ.09172016.txt', '001.EHZ.09182016.txt' ...
+    '001.EHZ.09192016.txt', '001.EHZ.09202016.txt', '001.EHZ.09212016.txt' ...
+    '001.EHZ.09222016.txt'});
+x2 = stack(path_2, {...
+    '020.EHZ.09162016.txt', '020.EHZ.09172016.txt', '020.EHZ.09182016.txt' ...
+    '020.EHZ.09192016.txt', '020.EHZ.09202016.txt', '020.EHZ.09212016.txt' ...
+    '020.EHZ.09222016.txt'});
 n  = length(x1); % The length of the signal
 
 % Parameters
@@ -45,7 +56,7 @@ Y_list = batch_proc(x1, x2, window_size, @(sig_a, sig_b) ...
 Y = mean(Y_list);
 non_zero_ind = find(filter);
 [tau, tau_val, cost_val] = compressed_sensing.solution( ...
-    Y, Fs, tau_xcorr / Ts, n, non_zero_ind, 100000);
+    Y, Fs, tau_xcorr / Ts, n, non_zero_ind, 10000);
 fprintf('Compressed Sensing Tau: %s\n', tau);
 
 %% EXP1: Error (real tau - cs tau) over downsampling rate
