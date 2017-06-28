@@ -32,6 +32,8 @@ classdef compressed_sensing
       
             Ts = 1 / Fs;
             freq_range = (0:n-1) / n;
+            disp(size(freq_range));
+            disp(size(non_zero_ind));
             freq_range = freq_range(non_zero_ind);
             tau_val    = (...
                 init_ind / Ts - search_width : ...

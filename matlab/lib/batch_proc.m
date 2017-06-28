@@ -40,7 +40,7 @@ function result = batch_proc( ...
         signal_a = signal_a - mean(signal_a);
         signal_b = signal_b - mean(signal_b);
         % Taper
-        w_sigma = window_size/6;
+        w_sigma = window_size/2;
         w_mean  = window_size/2;
         gaussian_window = normpdf((1:window_size), w_mean, w_sigma);
         signal_a = signal_a .* gaussian_window;

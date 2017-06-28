@@ -16,5 +16,4 @@ function R = fftconv(x1, x2, filter)
     %% Cross-correlation by FFT -> convolution -> IFFT
     cross = conj(x1_filter) .* x2_filter;
     R = fftshift(ifft(cross));
-
 end
