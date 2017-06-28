@@ -1,4 +1,4 @@
-function R = fftconv(x1, x2, filter)
+function R = fftconv(x1, x2)
     %% Padding zeros
     x1 = [x1 zeros(1, length(x1))];
     x2 = [x2 zeros(1, length(x2))];
@@ -10,10 +10,10 @@ function R = fftconv(x1, x2, filter)
 
     %% apply bandpass filter
     % filter = filters.gaussian_filter(low_freq, high_freq, 1, n, Fs);
-    x1_filter = x1_fft .* filter;
-    x2_filter = x2_fft .* filter;
+    % x1_filter = x1_fft .* filter;
+    % x2_filter = x2_fft .* filter;
 
     %% Cross-correlation by FFT -> convolution -> IFFT
-    cross = conj(x1_filter) .* x2_filter;
+    cross = conj(x1_fft) .* x2_fft;
     R = fftshift(ifft(cross));
 end

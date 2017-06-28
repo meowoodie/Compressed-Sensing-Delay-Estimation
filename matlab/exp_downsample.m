@@ -46,8 +46,8 @@ for i=1:length(date_list)
     % do the anonymous function for each of the windows
     % Res = [ [ (FFT-convolution) (Compressed-Sensing) ]; ... ]    
     Res = batch_proc(x1, x2, window_size, @(sig_a, sig_b)[ ...
-        fftconv(sig_a, sig_b, filter_Y) ...
-        compressed_sensing.sub_cost_function(sig_a, sig_b, filter_R) ]);
+        fftconv(sig_a, sig_b) ...
+        compressed_sensing.sub_cost_function(sig_a, sig_b) ]);
     
     % the length of fftconv curve (Y) is twice of the window size.
     Ys = [ Ys; Res(:, 1:window_size*2) ]; 
