@@ -59,7 +59,7 @@ end
 
 % Saving middle results for further use
 save('Middle_Res.mat', ...
-    'Rs', 'Ys', 'Fs', 'low_freq', 'high_freq', 'window_size');
+    'Rs', 'Ys', 'Fs', 'window_size');
 
 Y = mean(Ys);
 [m_value, m_index] = max(abs(real(Y)).^2);
@@ -69,7 +69,7 @@ fprintf('FFT-Convolution Tau: %s\n', tau_xcorr);
 R = mean(Rs);
 non_zero_ind = find(filter_R);
 [tau, tau_val, cost_val] = compressed_sensing.solution( ...
-    R, Fs, tau_xcorr / Ts, window_size, non_zero_ind, 10000);
+    R, Fs, tau_xcorr/Ts, window_size, 10000);
 fprintf('Compressed Sensing Tau: %s\n', tau);
 
 %% EXP1: Error (real tau - cs tau) over downsampling rate
