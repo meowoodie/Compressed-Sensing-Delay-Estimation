@@ -14,10 +14,10 @@ high_freq = 3;
 window_size = 5 * 60 * Fs;
 
 % Gaussian Filter
-filter_Y = filters.gaussian_filter( ...
-    low_freq, high_freq, 1, window_size*2, Fs);
-filter_R = filters.gaussian_filter( ...
-    low_freq, high_freq, 1, window_size, Fs);
+% filter_Y = filters.gaussian_filter( ...
+%     low_freq, high_freq, 1, window_size*2, Fs);
+% filter_R = filters.gaussian_filter( ...
+%     low_freq, high_freq, 1, window_size, Fs);
 
 %% 
 root_path = '/Users/woodie/Desktop/utah';
