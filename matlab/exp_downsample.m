@@ -15,9 +15,9 @@ window_size = 5 * 60 * Fs;
 
 % Gaussian Filter
 filter_Y = filters.gaussian_filter( ...
-    low_freq, high_freq, 1, window_size, Fs);
-filter_R = filters.gaussian_filter( ...
     low_freq, high_freq, 1, window_size*2, Fs);
+filter_R = filters.gaussian_filter( ...
+    low_freq, high_freq, 1, window_size, Fs);
 
 %% 
 root_path = '/Users/woodie/Desktop/utah';
@@ -46,8 +46,8 @@ for i=1:length(date_list)
     % do the anonymous function for each of the windows
     % Res = [ [ (FFT-convolution) (Compressed-Sensing) ]; ... ]    
     Res = batch_proc(x1, x2, window_size, @(sig_a, sig_b)[ ...
-        fftconv(sig_a, sig_b, filter_R) ...
-        compressed_sensing.sub_cost_function(sig_a, sig_b, filter_Y) ]);
+        fftconv(sig_a, sig_b, filter_Y) ...
+        compressed_sensing.sub_cost_function(sig_a, sig_b, filter_R) ]);
     
     % the length of fftconv curve (Y) is twice of the window size.
     Ys = [ Ys; Res(:, 1:window_size*2) ]; 
@@ -58,19 +58,19 @@ for i=1:length(date_list)
 end
 
 % Saving middle results for further use
-% save('Middle_Res.mat', ...
-%     'Rs', 'Ys', 'Fs', 'low_freq', 'high_freq', 'window_size');
+save('Middle_Res.mat', ...
+    'Rs', 'Ys', 'Fs', 'low_freq', 'high_freq', 'window_size');
 
-% R = mean(Rs);
-% [m_value, m_index] = max(abs(real(R)));
-% tau_xcorr = (m_index - window_size) * Ts;
-% fprintf('FFT-Convolution Tau: %s\n', tau_xcorr);
-% 
-% Y = mean(Ys);
-% non_zero_ind = find(filter_Y);
-% [tau, tau_val, cost_val] = compressed_sensing.solution( ...
-%     Y, Fs, tau_xcorr / Ts, window_size, non_zero_ind, 10000);
-% fprintf('Compressed Sensing Tau: %s\n', tau);
+Y = mean(Ys);
+[m_value, m_index] = max(abs(real(Y)).^2);
+tau_xcorr = (m_index - window_size) * Ts;
+fprintf('FFT-Convolution Tau: %s\n', tau_xcorr);
+
+R = mean(Rs);
+non_zero_ind = find(filter_R);
+[tau, tau_val, cost_val] = compressed_sensing.solution( ...
+    R, Fs, tau_xcorr / Ts, window_size, non_zero_ind, 10000);
+fprintf('Compressed Sensing Tau: %s\n', tau);
 
 %% EXP1: Error (real tau - cs tau) over downsampling rate
 % tau0_ind = tau_xcorr/Ts; % The initial tau for the method 2
