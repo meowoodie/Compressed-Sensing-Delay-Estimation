@@ -1,4 +1,4 @@
-function [ result ] = batch_proc( ...
+function result = batch_proc( ...
     x1, x2, window_size, ...
     func_handle) 
 % Batch Proc takes two signals, window size and a function handler as its
@@ -26,12 +26,14 @@ function [ result ] = batch_proc( ...
     % A row of the matrix is a segment of the raw signal (x(i,:))
     x1 = transpose(x1);
     x2 = transpose(x2);
-    fprintf('Window size: %d. Number of segments: %d\n', window_size, b);
+    fprintf('Preprocessing: [Window size] %d. [Number of segments] %d\n', ...
+        window_size, b);
 
     %% Do func_handle in batches with the divided segments of the signal
     
     result = [];
     for i=1:b
+        % fprintf('Processing window %d ...\n', i);
         signal_a = x1(i,:);
         signal_b = x2(i,:);
         % Remove the mean value on top of the segment
@@ -46,7 +48,7 @@ function [ result ] = batch_proc( ...
         % For debugging
         % Plot the central segment
         if i == b/2
-            paint.signal(gaussian_window, 50);
+            % paint.signal(gaussian_window, 50);
             paint.signal(signal_b, 50);
         end
         % Do callback function, like cross-correlation or our
@@ -60,4 +62,3 @@ function [ result ] = batch_proc( ...
     end
 
 end
-
