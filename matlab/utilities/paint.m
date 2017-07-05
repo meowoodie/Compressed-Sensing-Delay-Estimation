@@ -24,9 +24,20 @@ classdef paint
                 -1*floor(length(Y)/Fs)/2, ...
                 floor(length(Y)/Fs)/2, ...
                 length(Y));
-                plot(time_axis, real(Y), 'b'); 
-                xlabel('Time (s)'); 
-                title('cross-correlation in time domain');
+            plot(time_axis, real(Y), 'b'); 
+            xlabel('Time (s)'); 
+            title('cross-correlation in time domain');
+        end
+        
+        %% Plot cost function of the compressed-sensing method
+        % Plot the cost function of the compressed-sensing method, the
+        % input parameters includes the cost function curves and its
+        % x-axis. 
+        function f = compressed_sensing( cost_val, tau_val )
+            f = figure; % ('visible', 'off');
+            plot(tau_val, real(cost_val), 'b'); 
+            xlabel('Time (s)'); 
+            title('cost function of the compressed-sensing method');
         end
     end
 end

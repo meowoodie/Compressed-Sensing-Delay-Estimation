@@ -58,8 +58,8 @@ sub_Y = Y(window_size-10*Fs:window_size+10*Fs);
 paint.xcorr(real(sub_Y), Fs);
 
 % Filtered fftconv curve
-frq_Y = fft(Y, length(Y));
-frq_Y = frq_Y .* filter_Y;
-Y_filter     = ifft(frq_Y);
+frq_Y = fft(Y, length(Y));  % frequency domain of Y
+frq_Y = frq_Y .* filter_Y;  % bandpass Y by a gaussian filter
+Y_filter     = ifft(frq_Y); % time domain of Y after filtering
 sub_Y_filter = Y_filter(window_size-10*Fs:window_size+10*Fs);
 paint.xcorr(real(sub_Y_filter), Fs);
