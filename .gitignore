@@ -1,4 +1,6 @@
 avg_data/*
+*.sac
+*.mat
 *.pyc
 .DS_Store
 resource/*
