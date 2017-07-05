@@ -1,8 +1,12 @@
+% Experiment for comparing traditional cross-correlation (fftconv) method
+% and compressed-sensing method on the data within an indicated range of
+% dates.
+
 close all;
 clear all;
 
 addpath('lib');
-addpath('MatSAC');
+addpath('utilities');
 
 %% Preliminary
 
@@ -11,15 +15,18 @@ Fs        = 50;       % Sampling rate
 Ts        = 1.0 / Fs; % Time interval
 low_freq  = 1;
 high_freq = 3;
-window_size = 5 * 60 * Fs;
+window_size  = 5 * 60 * Fs;
+search_width = 10;    % in seconds
 
 % Gaussian Filter
-% filter_Y = filters.gaussian_filter( ...
-%     low_freq, high_freq, 1, window_size*2, Fs);
-% filter_R = filters.gaussian_filter( ...
-%     low_freq, high_freq, 1, window_size, Fs);
+% - For fftconv
+filter_Y = filters.gaussian_filter( ...
+    low_freq, high_freq, 1, window_size*2, Fs);
+% - For compressed-sensing
+filter_R = filters.gaussian_filter( ...
+    low_freq, high_freq, 1, window_size, Fs);
 
-%% 
+%% Loop for calculating cost functions
 root_path = '/Users/woodie/Desktop/utah';
 station_A = '001';
 station_B = '020';
@@ -47,7 +54,7 @@ for i=1:length(date_list)
     % Res = [ [ (FFT-convolution) (Compressed-Sensing) ]; ... ]    
     Res = batch_proc(x1, x2, window_size, @(sig_a, sig_b)[ ...
         fftconv(sig_a, sig_b) ...
-        compressed_sensing.sub_cost_function(sig_a, sig_b) ]);
+        compressed_sensing.sub_cost_function(sig_a, sig_b, filter_R) ]);
     
     % the length of fftconv curve (Y) is twice of the window size.
     Ys = [ Ys; Res(:, 1:window_size*2) ]; 
@@ -61,15 +68,22 @@ end
 save('Middle_Res.mat', ...
     'Rs', 'Ys', 'Fs', 'window_size');
 
+%% Estimate time delay (tau)
+
 Y = mean(Ys);
-[m_value, m_index] = max(abs(real(Y)).^2);
+frq_Y = fft(Y, length(Y));
+frq_Y = frq_Y .* filter_Y;
+Y_filter = ifft(frq_Y);
+sub_Y_filter = Y_filter( ...
+    window_size-search_width*Fs:window_size+search_width*Fs);
+[m_value, m_index] = max(abs(real(sub_Y_filter)).^2);
 tau_xcorr = (m_index - window_size) * Ts;
 fprintf('FFT-Convolution Tau: %s\n', tau_xcorr);
 
 R = mean(Rs);
 non_zero_ind = find(filter_R);
 [tau, tau_val, cost_val] = compressed_sensing.solution( ...
-    R, Fs, tau_xcorr/Ts, window_size, 10000);
+    R, Fs, 0, window_size, non_zero_ind, search_width*Fs);
 fprintf('Compressed Sensing Tau: %s\n', tau);
 
 %% EXP1: Error (real tau - cs tau) over downsampling rate

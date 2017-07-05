@@ -1,7 +1,7 @@
 classdef compressed_sensing
     methods (Static)
         function Y = sub_cost_function( ...
-            x1, x2)
+            x1, x2, filter)
         % Sub Cost Function
         
             % Parameters
@@ -13,26 +13,25 @@ classdef compressed_sensing
             x2_fft = fft(x2, n); % same size as x2
 
             % Apply bandpass filter
-            % x1_filter = x1_fft .* filter;
-            % x2_filter = x2_fft .* filter;
+            x1_filter = x1_fft .* filter;
+            x2_filter = x2_fft .* filter;
 
             % Remove the zero value.
-            % non_zero_ind = find(filter);
-            % x1_filter = x1_fft(non_zero_ind);
-            % x2_filter = x2_fft(non_zero_ind);
-            % freq_range = freq_range(non_zero_ind);
+            non_zero_ind = find(filter);
+            x1_filter = x1_filter(non_zero_ind);
+            x2_filter = x2_filter(non_zero_ind);
             
             % Cost function
-            Y = (x1_fft) .* conj(x2_fft) .* (abs(x1_fft) .^2);
+            Y = (x1_filter) .* conj(x2_filter) .* (abs(x1_filter) .^2);
         end
         
         function [ tau, tau_val, cost_val ] = solution(Y, Fs, init_ind, ...
-                n, search_width)
+                n, non_zero_ind, search_width)
         % Solution    
       
             Ts = 1 / Fs;
             freq_range = (0:n-1) / n;
-            % freq_range = freq_range(non_zero_ind);
+            freq_range = freq_range(non_zero_ind);
             tau_val    = (...
                 init_ind / Ts - search_width : ...
                 init_ind / Ts + search_width) * Ts;
@@ -47,7 +46,7 @@ classdef compressed_sensing
             end
             
             % Get estimated tau value
-            [min_cost, index] = min(cost_val);
+            [min_cost, index] = max(cost_val);
             tau = tau_val(index) * Ts;
         end
     end

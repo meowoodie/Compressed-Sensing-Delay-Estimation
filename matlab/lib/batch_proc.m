@@ -16,13 +16,6 @@ function result = batch_proc( ...
     % Reshape the signals into 2D matrix,
     x1 = reshape(x1(1:n), window_size, b);
     x2 = reshape(x2(1:n), window_size, b);
-    % Whitening
-    if max(abs(x1)) ~= 0
-        x1 = bsxfun(@times, x1, 1./max(abs(x1)));
-    end
-    if max(abs(x2)) ~= 0
-        x2 = bsxfun(@times, x2, 1./max(abs(x2)));
-    end
     % A row of the matrix is a segment of the raw signal (x(i,:))
     x1 = transpose(x1);
     x2 = transpose(x2);
@@ -39,6 +32,13 @@ function result = batch_proc( ...
         % Remove the mean value on top of the segment
         signal_a = signal_a - mean(signal_a);
         signal_b = signal_b - mean(signal_b);
+        % Whitening
+        if max(abs(signal_a)) ~= 0
+            signal_a = bsxfun(@times, signal_a, 1./max(abs(signal_a)));
+        end
+        if max(abs(signal_b)) ~= 0
+            signal_b = bsxfun(@times, signal_b, 1./max(abs(signal_b)));
+        end
         % Taper
         w_sigma = window_size/2;
         w_mean  = window_size/2;
@@ -47,10 +47,11 @@ function result = batch_proc( ...
         signal_b = signal_b .* gaussian_window;
         % For debugging
         % Plot the central segment
-        if i == b/2
+        %if i == b/2
             % paint.signal(gaussian_window, 50);
-            paint.signal(signal_b, 50);
-        end
+            % paint.signal(signal_b, 50);
+        % end
+        
         % Do callback function, like cross-correlation or our
         % compressed-sensing based algorithm ...
         % Note: If you have other paremeters for the func_handle,
