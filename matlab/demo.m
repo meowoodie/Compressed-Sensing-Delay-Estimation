@@ -1,4 +1,5 @@
-% A standard demo for reproducing the same results
+% A standard demo for reproducing the same results that Utah team had based
+% on the Utah dataset
 
 close all;
 clear all;
