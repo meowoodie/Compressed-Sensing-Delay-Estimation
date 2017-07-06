@@ -25,20 +25,17 @@ classdef compressed_sensing
             Y = (x1_filter) .* conj(x2_filter) .* (abs(x1_filter) .^2);
         end
         
-        function [ tau, tau_val, cost_val ] = solution(Y, Fs, init_ind, ...
+        function [ tau, tau_val, cost_val ] = solution(Y, Fs, init_tau, ...
                 n, non_zero_ind, search_width)
         % Solution    
       
             Ts = 1 / Fs;
             freq_range = (0:n-1) / n;
             freq_range = freq_range(non_zero_ind);
-            tau_val    = (...
-                init_ind / Ts - search_width : ...
-                init_ind / Ts + search_width) * Ts;
-            % tau_val    = linspace( ...
-            %     init_tau - search_width, ... % Start of the range tau
-            %     init_tau + search_width, ... % End of the range tau
-            %     search_length);              % Accuracy of the search range
+            tau_val = linspace( ...
+                init_tau - search_width, ... % Start of the range tau
+                init_tau + search_width, ... % End of the range tau
+                1000);                       % Accuracy of the search range
             cost_val   = zeros(1, length(tau_val));
             for i = 1:length(tau_val)
                 p = exp(-1.0 .* complex(0,1) .* 2 .* pi .* tau_val(i) .* freq_range);
@@ -47,7 +44,7 @@ classdef compressed_sensing
             
             % Get estimated tau value
             [min_cost, index] = max(cost_val);
-            tau = tau_val(index) * Ts;
+            tau = tau_val(index);
         end
     end
 end

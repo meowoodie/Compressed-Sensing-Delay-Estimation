@@ -1,7 +1,7 @@
 function result = batch_windows( ...
     x1, x2, window_size, ...
     func_handle) 
-% Batch Proc takes two signals, window size and a function handler as its
+% Batch Windows takes two signals, window size and a function handler as its
 % parameters, which used to preprocess the raw signals and do the indicated
 % task for the segments of the signals.
 % The preprocessing of the raw signals includes 1. cutting the signals by 
